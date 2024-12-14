@@ -4,7 +4,8 @@ using System.Security.Cryptography.X509Certificates;
 using Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace Services {
+namespace Services 
+{
     public class FoodService
     {
         private readonly AppDbContext _context;

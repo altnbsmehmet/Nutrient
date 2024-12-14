@@ -6,7 +6,6 @@ using Services;
 public class FoodsController : Controller
 {
     private readonly FoodService _foodService;
-
     public FoodsController(FoodService foodService)
     {
         _foodService = foodService;
