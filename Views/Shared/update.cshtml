@@ -1,0 +1,21 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/style.css"/>
+</head>
+<body>
+
+    <form class="flexbox" asp-action="UpdateFood" asp-controller="Foods" method="POST">
+        <h3>Update "@(ViewBag.food.Name)" item with id:@(ViewBag.food.Id)</h3>
+        <input type="hidden" name="id" value="@(ViewBag.food.Id)">
+        <textarea name="name" placeholder="Name..." value="">@(ViewBag.food.Name)</textarea> </br>
+        <textarea name="calorie" value="" value="">@(ViewBag.food.Calories)</textarea> </br>
+        <button class="submitButton" type="submit">Update</button>
+    </form>
+
+</body>
+</html>

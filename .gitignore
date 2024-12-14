@@ -1,0 +1,34 @@
+# Genel
+bin/
+obj/
+Data/Migrations
+*.user
+*.suo
+*.log
+*.tmp
+*.vscode/
+*.swp
+
+# Yapılandırma dosyaları
+appsettings.Development.json
+appsettings.*.json
+secret.json
+appsettings.json
+
+# Kullanıcı tarafından oluşturulan dosyalar
+*.csproj.user
+*.cache
+*.DS_Store
+
+# İşletim Sistemi dosyaları
+Thumbs.db
+desktop.ini
+
+# IDE'ler ve editörler için
+.vscode/
+.idea/
+*.code-workspace
+
+# Paket Yöneticileri
+node_modules/
+npm-debug.log
