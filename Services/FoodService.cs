@@ -9,7 +9,6 @@ namespace Services
     public class FoodService
     {
         private readonly AppDbContext _context;
-        Random random = new Random();
         public FoodService(AppDbContext context)
         {
             _context = context;

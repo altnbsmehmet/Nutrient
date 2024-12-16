@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Authorization;
 using Services;
 
+[Authorize]
 [Route("/foods")]
 public class FoodsController : Controller
 {

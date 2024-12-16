@@ -6,12 +6,13 @@ namespace Data
     {
         public int Id { get; set;}
         public string Name { get; set; }
+        public string Type { get; set; }
         public int Calories { get; set; }
-        public decimal Carbohydrate { get; set ; }
-        public decimal Protein { get; set; }
-        public decimal Fat { get; set; }
-        public decimal VitaminA {get; set; }
-        public decimal Calcium { get; set; }
+        public double Carbohydrate { get; set ; }
+        public double Protein { get; set; }
+        public double Fat { get; set; }
+        public double VitaminA {get; set; }
+        public double Calcium { get; set; }
 
         public ICollection<MealFoodItem> MealFoodItems { get; set; } = new List<MealFoodItem>();
     }

@@ -8,8 +8,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddScoped<FoodService>();
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IdentityService>();
+builder.Services.AddScoped<MealService>();
+builder.Services.AddScoped<FoodService>();
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

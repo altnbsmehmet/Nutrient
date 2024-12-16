@@ -6,8 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="~/css/style.css"/>
+    <link rel="stylesheet" href="~/css/sidebar.css"/>
 </head>
 <body>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <ul>
+            <li><a href="/pages/profile">Profile</a></li>
+            <li><a href="/pages/index">Home</a></li>
+            <li><a href="/pages/dashboard">Dashboards</a></li>
+            <li><a href="/pages/meals">Meals</a></li>
+            <li><a href="/pages/signout">Sign out</a></li>
+        </ul>
+    </div>
 
     <form class="flexbox" asp-action="CreateFood" asp-controller="Foods" method="POST">
         <h2>Create a food item.</h2>
@@ -40,5 +57,6 @@
         }
     </div>
 
+<script src="~/script/script.js"></script>
 </body>
 </html>

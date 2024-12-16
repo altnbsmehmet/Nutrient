@@ -6,30 +6,41 @@ using System.Net.Http.Headers;
 using Services;
 
 
-[Route("/")]
+[Route("/pages")]
 public class PagesController : Controller
 {
     private readonly FoodService _foodService;
+    private readonly MealService _mealService;
+    private readonly IdentityService _identityService;
 
-    public PagesController(FoodService foodService)
+    public PagesController(FoodService foodService, MealService mealService, IdentityService identityService)
     {
-    _foodService = foodService;
+        _foodService = foodService;
+        _mealService = mealService;
+        _identityService = identityService;
     }
 
-    [HttpGet]
+    [HttpGet("/")]
     public IActionResult SignIn()
     {
         return View("signIn");
     }
 
-    [HttpGet("signUp")]
+    [HttpGet("/signUp")]
     public IActionResult SignUp()
     {
         return View("signUp");
     }
 
     [Authorize]
-    [HttpGet("pages")] 
+    [HttpGet("profile")]
+    public async Task<IActionResult> Profile()
+    {
+        return View("profile");
+    }
+
+    [Authorize]
+    [HttpGet("index")]
     public async Task<IActionResult> Index()
     {
         ViewBag.Foods = await _foodService.GetAllFoodsAsync();
@@ -37,19 +48,26 @@ public class PagesController : Controller
     }
 
     [Authorize]
-    [HttpGet("pages/details")] 
-    public async Task<IActionResult> Details(int id)
+    [HttpGet("dashboards")]
+    public async Task<IActionResult> Dashboards()
     {
-        ViewBag.food = await _foodService.GetFoodByIdAsync(id);
-        return View("viewinfo");
+        return View("dashboards");
     }
 
     [Authorize]
-    [HttpGet("pages/edit")] 
-    public async Task<IActionResult> Edit(int id)
+    [HttpGet("meals")] 
+    public async Task<IActionResult> Meals()
     {
-        ViewBag.food = await _foodService.GetFoodByIdAsync(id);
-        return View("update");
+        ViewBag.Meals = await _mealService.GetAllMealsAsync();
+        return View("meals");
+    }
+
+    [Authorize]
+    [HttpGet("signout")]
+    public async Task<IActionResult> SignOut()
+    {
+        await _identityService.SignOutAsync();
+        return RedirectToAction("SignIn", "Pages");
     }
 
 }

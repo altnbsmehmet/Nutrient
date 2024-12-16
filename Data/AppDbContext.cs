@@ -27,6 +27,11 @@ namespace Data
                 .HasOne(mf => mf.FoodItem)
                 .WithMany(f => f.MealFoodItems)
                 .HasForeignKey(mf => mf.FoodItemId);
+
+            modelBuilder.Entity<Meal>()
+                .HasOne(m => m.User)
+                .WithMany(u => u.Meals)
+                .HasForeignKey(m => m.UserId);
         }
 
     }

@@ -1,0 +1,77 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/style.css"/>
+    <link rel="stylesheet" href="~/css/sidebar.css"/>
+</head>
+<body>
+
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <ul>
+            <li><a href="/pages/profile">Profile</a></li>
+            <li><a href="/pages/index">Home</a></li>
+            <li><a href="/pages/dashboard">Dashboards</a></li>
+            <li><a href="/pages/meals">Meals</a></li>
+            <li><a href="/pages/signout">Sign out</a></li>
+        </ul>
+    </div>
+
+    <div class="grid">
+        <div style="grid-column: span 4; height: auto;" class="flexbox">
+            <div>
+                <h1 style="display: inline-block;">Meals    </h1>
+                <button id="showMealFormButton" onclick="toggleMealForm()" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
+            </div>
+            <div id="createMealForm" style="display: none;">
+                <form asp-action="CreateMeal" asp-controller="Meals" method="POST">
+                    <label>Meal Name:</label>
+                    <input type="text" name="name" required />
+                    <button type="submit" class="smallButton">Create</button>
+                </form>
+            </div>
+        </div>
+        @{int id = 0;}
+        @foreach(var meal in ViewBag.Meals)
+        {
+            <div class="flexbox" style="grid-column: span 2; height: auto">
+                <div>
+                    <h3 style="display: inline-block;">@(meal.Name)</h3>
+                    <button id="showFoodFormButton@(id)" onclick="toggleFoodForm(@(id))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
+                    <div id="createFoodForm@(id)" class="foodForm" style="display: none;">
+                        <form asp-action="CreateFood" asp-controller="Foods" method="POST">
+                            <label>Food Name:</label>
+                            <input type="text" name="name" required />
+                            <input type="number" name="calorie" required />
+                            <button type="submit" class="smallButton">Create</button>
+                        </form>
+                    </div>
+                </div>
+                @if (meal.MealFoodItems != null)
+                {
+                    @foreach(var mealFoodItem in meal.MealFoodItems)
+                    {
+                        <div>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Name)</p>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Type)</p>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calories)</p>
+                        </div>
+                    }
+                }
+            </div>
+            id += 1;
+        }
+    </div>
+
+<script src="~/script/script.js"></script>
+</body>
+</html>
