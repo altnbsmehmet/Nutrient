@@ -14,23 +14,23 @@ public class FoodsController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateFood(string name, int calorie)
+    public async Task<IActionResult> CreateFood(int mealId, string name, int calorie, string type)
     {
-        await _foodService.AddFoodAsync(name, calorie);
-        return RedirectToAction("Index", "Pages");
+        await _foodService.AddFoodAsync(mealId, name, calorie, type);
+        return RedirectToAction("Meals", "Pages");
     }
 
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateFood(int id, string name, int calorie)
+    public async Task<IActionResult> UpdateFood(int id, string name, int calorie, string type)
     {
-        await _foodService.UpdateFoodAsync(id, name, calorie);
-        return RedirectToAction("Index", "Pages");
+        await _foodService.UpdateFoodAsync(id, name, calorie, type);
+        return RedirectToAction("Meals", "Pages");
     }
 
     [HttpPost("delete")]
     public async Task<IActionResult> DeleteFood(int id)
     {
         await _foodService.DeleteFoodAsync(id);
-        return RedirectToAction("Index", "Pages");
+        return RedirectToAction("Meals", "Pages");
     }
 }

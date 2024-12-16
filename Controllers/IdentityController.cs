@@ -26,7 +26,7 @@ public class IdentityController : Controller
     public async Task<IActionResult> SignUp(string email, string userName, string password, string firstName, string lastName, string gender, double height, double weight)
     {
         var result = await _identityService.SignUpAsync(email, userName, password, firstName, lastName, gender, height, weight);
-        if (result.Succeeded) return RedirectToAction("Index", "Pages");
+        if (result.Succeeded) return RedirectToAction("SignIn", "Pages");
         ViewBag.result = result.Errors;
         return View("signUp");
     }

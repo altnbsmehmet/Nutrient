@@ -26,6 +26,7 @@ namespace Services
             var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
             return await _context.Users.SingleOrDefaultAsync(u => u.Id == user.Id);
         }
+        
         public async Task<string> AddMealAsync(string name)
         {
             var currentUser = await GetCurrentUserAsync();

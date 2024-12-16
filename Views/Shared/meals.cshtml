@@ -27,48 +27,79 @@
     </div>
 
     <div class="grid">
+        <!-- Meal Title -->
         <div style="grid-column: span 4; height: auto;" class="flexbox">
             <div>
                 <h1 style="display: inline-block;">Meals    </h1>
                 <button id="showMealFormButton" onclick="toggleMealForm()" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
             </div>
             <div id="createMealForm" style="display: none;">
-                <form asp-action="CreateMeal" asp-controller="Meals" method="POST">
+                <form class="flexbox" style="height: auto;" asp-action="CreateMeal" asp-controller="Meals" method="POST">
                     <label>Meal Name:</label>
                     <input type="text" name="name" required />
                     <button type="submit" class="smallButton">Create</button>
                 </form>
             </div>
         </div>
-        @{int id = 0;}
+
+        <!-- Meals -->
+        @{int mealId = 0; double foodId = -1.0;}
         @foreach(var meal in ViewBag.Meals)
         {
             <div class="flexbox" style="grid-column: span 2; height: auto">
                 <div>
                     <h3 style="display: inline-block;">@(meal.Name)</h3>
-                    <button id="showFoodFormButton@(id)" onclick="toggleFoodForm(@(id))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
-                    <div id="createFoodForm@(id)" class="foodForm" style="display: none;">
-                        <form asp-action="CreateFood" asp-controller="Foods" method="POST">
+                    <button id="showFoodFormButton@(mealId)" onclick="toggleFoodForm(@(mealId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
+                    <div id="createFoodForm@(mealId)" class="foodForm" style="display: none;">
+                        <form class="flexbox" style="height: auto;" asp-action="CreateFood" asp-controller="Foods" method="POST">
+                            <input type="hidden" name="mealId" value="@(meal.Id)" />
                             <label>Food Name:</label>
                             <input type="text" name="name" required />
+                            <label>Calorie:</label>
                             <input type="number" name="calorie" required />
+                            <label>Type:</label>
+                            <input type="text" name="type" required />
                             <button type="submit" class="smallButton">Create</button>
                         </form>
                     </div>
                 </div>
+
+                <!-- Foods -->
                 @if (meal.MealFoodItems != null)
                 {
                     @foreach(var mealFoodItem in meal.MealFoodItems)
                     {
                         <div>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Name)</p>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Type)</p>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calories)</p>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Name) - </p>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Type) - </p>
+                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calories) </p>
+                            <button id="showFoodFormButton@(foodId)" onclick="toggleFoodForm(@(foodId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">...</button>
+                            <!-- toggleable food operations -->
+                            <div id="foodOperations@(foodId)" class="foodForm" style="display: none;">
+                                <div class="flexbox" style="height: auto;">
+                                    <button id="showUpdateFormButton@(foodId)" class="smallButton" onclick="toggleFoodForm(@(foodId)); toggleUpdateFoodForm(@(foodId))" style="cursor: pointer;">Update</button>
+                                    <form asp-action="DeleteFood" asp-controller="Foods" method="POST">
+                                        <input type="hidden" name="id" value="@(mealFoodItem.FoodItem.Id)" />
+                                        <button class="smallButton" type="submit" onclick="toggleFoodForm(@(foodId))" style="cursor: pointer;">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- toggleable food update form -->
+                            <div id="updateFoodForm@(foodId)" class="foodForm" style="display: none;">
+                                <form class="flexbox" style="height: auto;" asp-action="UpdateFood" asp-controller="Foods" method="POST">
+                                    <input type="hidden" name="id" value="@(mealFoodItem.FoodItem.Id)" />
+                                    <textarea name="name">@(mealFoodItem.FoodItem.Name)</textarea>
+                                    <textarea name="calorie">@(mealFoodItem.FoodItem.Calories)</textarea>
+                                    <textarea name="type">@(mealFoodItem.FoodItem.Type)</textarea>
+                                    <button class="smallButton" type="submit" onclick="toggleUpdateFoodForm(@foodId)">Update</button>
+                                </form>
+                            </div>
                         </div>
+                        foodId -= 1;
                     }
                 }
             </div>
-            id += 1;
+            mealId += 1;
         }
     </div>
 

@@ -34,17 +34,37 @@ function toggleMealForm() {
 }
 
 function toggleFoodForm(id) {
-    const form = document.getElementById(`createFoodForm${id}`);
-    const button = document.getElementById(`showFoodFormButton${id}`);
+    if (id >= 0) {
+        const form = document.getElementById(`createFoodForm${id}`);
+        const button = document.getElementById(`showFoodFormButton${id}`);
+        if (form.style.display == 'none' || form.style.display == '') {
+            const buttonRect = button.getBoundingClientRect();
+    
+            form.style.left = `${buttonRect.right}px`;
+            form.style.top = `${buttonRect.bottom}px`;
+            form.style.display = 'block';
+        } else  form.style.display = 'none';
+    } else {
+        const form = document.getElementById(`foodOperations${id}`);
+        const button = document.getElementById(`showFoodFormButton${id}`);
+        if (form.style.display == 'none' || form.style.display == '') {
+            const buttonRect = button.getBoundingClientRect();
+    
+            form.style.left = `${buttonRect.right}px`;
+            form.style.top = `${buttonRect.bottom}px`;
+            form.style.display = 'block';
+        } else form.style.display = 'none';
+    }
+}
 
-    console.log('Form visibility:', form.style.display); 
+function toggleUpdateFoodForm(id) {
+    const form = document.getElementById(`updateFoodForm${id}`);
+    const button = document.getElementById(`showFoodFormButton${id}`);
     if (form.style.display == 'none' || form.style.display == '') {
         const buttonRect = button.getBoundingClientRect();
 
         form.style.left = `${buttonRect.right}px`;
         form.style.top = `${buttonRect.bottom}px`;
         form.style.display = 'block';
-    } else {
-        form.style.display = 'none';
-    }
+    } else form.style.display = 'none';
 }
