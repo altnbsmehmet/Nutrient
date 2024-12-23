@@ -4,20 +4,27 @@ using System.Security.Cryptography.X509Certificates;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 
 namespace Services
 {
     public class IdentityService
     {
-        private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        public IdentityService(AppDbContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public IdentityService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
-            _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
         }
 
         public async Task<SignInResult> SignInAsync(string userName, string password)
@@ -41,6 +48,18 @@ namespace Services
         public async Task SignOutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task Update(string firstname, string lastname, double height, double weight)
+        {
+            var user = await GetCurrentUserAsync();
+
+            user.FirstName = firstname;
+            user.LastName = lastname;
+            user.Height = height;
+            user.Weight = weight;
+
+            await _userManager.UpdateAsync(user);
         }
 
     }

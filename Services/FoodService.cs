@@ -12,24 +12,16 @@ namespace Services
     public class FoodService
     {
         private readonly AppDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        public FoodService(AppDbContext context, UserManager<ApplicationUser> userManager, IHttpContextAccessor httpContextAccessor)
+        private readonly IdentityService _identityService;
+        public FoodService(AppDbContext context, IdentityService identityService)
         {
             _context = context;
-            _userManager = userManager;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        public async Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            var user = await _userManager.GetUserAsync(_httpContextAccessor.HttpContext.User);
-            return await _context.Users.SingleOrDefaultAsync(u => u.Id == user.Id);
+            _identityService = identityService;
         }
 
         public async Task<string> AddFoodAsync(int mealId, string name, int calorie, string type)
         {
-            var currentUser = await GetCurrentUserAsync();
+            var currentUser = await _identityService.GetCurrentUserAsync();
 
             var foods = await GetAllFoodsAsync();
             foreach (var foodObject in foods)
@@ -56,7 +48,7 @@ namespace Services
 
         public async Task<List<FoodItem>> GetAllFoodsAsync()
         {
-            var currentUser = await GetCurrentUserAsync();
+            var currentUser = await _identityService.GetCurrentUserAsync();
             return await _context.FoodItem
                 .Include(f => f.MealFoodItems)
                 .ThenInclude(mfi => mfi.Meal)

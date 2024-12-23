@@ -1,0 +1,41 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/style.css"/>
+    <link rel="stylesheet" href="~/css/sidebar.css"/>
+</head>
+<body>
+    
+    <div class="menu-toggle" onclick="toggleMenu()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <div id="sidebar" class="sidebar">
+        <ul>
+            <li><a href="/pages/profile">Profile</a></li>
+            <li><a href="/pages/index">Home</a></li>
+            <li><a href="/pages/dashboard">Dashboards</a></li>
+            <li><a href="/pages/meals">Meals</a></li>
+            <li><a href="/pages/signout">Sign out</a></li>
+        </ul>
+    </div>
+
+    <div class="flexbox">
+        <form asp-action="Update" asp-controller="Identity" method="POST">
+            <h1>FirstName:</h1><textarea name="firstname">@(ViewBag.User.FirstName)</textarea>
+            <h1>LastName:</h1><textarea name="lastname">@(ViewBag.User.LastName)</textarea>
+            <h3>Height: </h3><textarea name="height">@(ViewBag.User.Height)</textarea>
+            <h3>Weight: </h3><textarea name="weight">@(ViewBag.User.Weight)</textarea>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+
+<script src="~/script/script.js"></script>
+</body>
+</html>

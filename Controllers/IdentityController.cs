@@ -31,4 +31,11 @@ public class IdentityController : Controller
         return View("signUp");
     }
 
+    [HttpPost("update")]
+    public async Task<IActionResult> Update(string firstname, string lastname, double height, double weight)
+    {
+        await _identityService.Update(firstname, lastname, height, weight);
+        return RedirectToAction("Profile", "Pages");
+    }
+
 }

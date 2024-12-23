@@ -36,6 +36,7 @@ public class PagesController : Controller
     [HttpGet("profile")]
     public async Task<IActionResult> Profile()
     {
+        ViewBag.User = await _identityService.GetCurrentUserAsync();
         return View("profile");
     }
 

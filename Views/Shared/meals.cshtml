@@ -16,7 +16,7 @@
         <span class="bar"></span>
     </div>
 
-    <div id="sidebar" class="sidebar">
+    <div id="sidebar" class="sidebar"> 
         <ul>
             <li><a href="/pages/profile">Profile</a></li>
             <li><a href="/pages/index">Home</a></li>
@@ -46,7 +46,7 @@
         @{int mealId = 0; double foodId = -1.0;}
         @foreach(var meal in ViewBag.Meals)
         {
-            <div class="flexbox" style="grid-column: span 2; height: auto">
+            <div class="flexbox" style="grid-column: span 2; height: auto;">
                 <div>
                     <h3 style="display: inline-block;">@(meal.Name)</h3>
                     <button id="showFoodFormButton@(mealId)" onclick="toggleFoodForm(@(mealId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
@@ -70,10 +70,13 @@
                     @foreach(var mealFoodItem in meal.MealFoodItems)
                     {
                         <div>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Name) - </p>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Type) - </p>
-                            <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calories) </p>
-                            <button id="showFoodFormButton@(foodId)" onclick="toggleFoodForm(@(foodId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">...</button>
+                            <div style="width: 200px; display: flex; flex-direction: row; justify-content: space-between; align-items: center;">
+                                <p style="display: inline-block;">@(mealFoodItem.FoodItem.Name) </p>
+                                <div>
+                                    <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calories) </p>
+                                    <button id="showFoodFormButton@(foodId)" onclick="toggleFoodForm(@(foodId))" style="cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">...</button>
+                                </div>
+                            </div>
                             <!-- toggleable food operations -->
                             <div id="foodOperations@(foodId)" class="foodForm" style="display: none;">
                                 <div class="flexbox" style="height: auto;">
