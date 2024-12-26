@@ -24,17 +24,17 @@ public class MealsController : Controller
     }
 
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateFood(int id, string name)
+    public async Task<IActionResult> UpdateMeal(int id, string name)
     {
         await _mealService.UpdateMealAsync(id, name);
-        return RedirectToAction("Index", "Pages");
+        return RedirectToAction("Meals", "Pages");
     }
 
     [HttpPost("delete")]
-    public async Task<IActionResult> DeleteFood(int id)
+    public async Task<IActionResult> DeleteMeal(int id)
     {
         await _mealService.DeleteMealAsync(id);
-        return RedirectToAction("Index", "Pages");
+        return RedirectToAction("Meals", "Pages");
     }
 
 }

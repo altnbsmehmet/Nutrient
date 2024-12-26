@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="~/css/style.css"/>
-    <link rel="stylesheet" href="~/css/sidebar.css"/>
+    <link rel="stylesheet" href="~/css/toggle.css"/>
 </head>
 <body>
     
@@ -32,7 +32,7 @@
             <h1>LastName:</h1><textarea name="lastname">@(ViewBag.User.LastName)</textarea>
             <h3>Height: </h3><textarea name="height">@(ViewBag.User.Height)</textarea>
             <h3>Weight: </h3><textarea name="weight">@(ViewBag.User.Weight)</textarea>
-            <button type="submit">Update</button>
+            <button type="submit" class="submitButton">Update</button>
         </form>
     </div>
 
