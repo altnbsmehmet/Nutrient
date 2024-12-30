@@ -10,13 +10,13 @@
 </head>
 <body>
 
+    <!-- Sidebar -->
     <div class="menu-toggle" onclick="toggleMenu()">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
     </div>
-
-    <div id="sidebar" class="sidebar">
+    <div id="sidebar" class="sidebar"> 
         <ul>
             <li><a href="/pages/profile">Profile</a></li>
             <li><a href="/pages/index">Home</a></li>
@@ -26,37 +26,19 @@
         </ul>
     </div>
 
-    <form class="flexbox" asp-action="CreateFood" asp-controller="Foods" method="POST">
-        <h2>Create a food item.</h2>
-        <input type="text" name="name" placeholder="Name..."> </br>
-        <input type="number" name="calorie" placeholder="Calorie..."> </br>
-        <button class="submitButton" type="submit">Create</button>
+    <!-- Search -->
+    <form class="flexbox" id="searchForm" asp-action="SearchFoods" asp-controller="Foods" method="POST">
+        <label for="searchQuery">Search Food:</label>
+        <input type="text" id="searchKeyword" name="keyword" required />
+        <button type="submit">Search</button>
     </form>
 
-    </br>
-
-    <div class="grid">
-        <div class="flexbox" style="grid-column: span 4; height: auto;"><h2 style="display: inline-block;">Foods</h2></div>
-        @foreach (var food in ViewBag.Foods)
-        {
-            <div class="flexbox" style="height: auto">
-                <p>@food.Name</p>
-                <form asp-action="Details" asp-controller="Pages" method="GET">
-                    <input type="hidden" name="id" value="@food.Id"/>
-                    <button class="smallButton" type="submit">View</button>
-                </form>
-                <form asp-action="Edit" asp-controller="Pages" method="GET">
-                    <input type="hidden" name="id" value="@food.Id"/>
-                    <button class="smallButton" type="submit">Update</button>
-                </form>
-                <form asp-action="DeleteFood" asp-controller="Foods" method="POST">
-                    <input type="hidden" name="id" value="@food.Id"/>
-                    <button class="smallButton" type="submit">Delete</button>
-                </form>
-            </div>
-        }
+    <!-- SearchResult -->
+    <div class="flexbox" style="height: auto;" id="searchResults">
     </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/script/fetch.js"></script>
 <script src="~/script/script.js"></script>
 </body>
 </html>

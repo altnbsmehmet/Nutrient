@@ -9,19 +9,21 @@
 </head>
 <body>
 
-    <form class="flexbox" asp-action="SignIn" asp-controller="Identity" method="POST">
-        <h1>Nutrient Tracking App</h1>
-        <input type="text" name="username" placeholder="username..."/>
-        <input type="text" name="password" placeholder="password..."/>
-        <button class="submitButton" type="submit">Sign In</button>
-        @if(ViewBag.result != null) {
-        <p>@(ViewBag.result)</p>
-        }
-    </form>
-
-    <form class="flexbox" asp-action="SignUp" asp-controller="Pages" method="GET">
-        <button class="smallButton" type="submit">Sign Up</button>
-    </form>
+    <div class="flexbox">
+        <form class="flexbox" style="height: auto;" asp-action="SignIn" asp-controller="Identity" method="POST">
+            <h1>Nutrient Tracking App</h1>
+            <input type="text" name="username" placeholder="username..."/>
+            <input type="text" name="password" placeholder="password..."/>
+            <button class="submitButton" type="submit">Sign In</button>
+            @if(ViewBag.result != null) 
+            {
+            <p>@(ViewBag.result)</p>
+            }
+        </form>
+        <form class="flexbox" style="height: auto;" asp-action="SignUp" asp-controller="Pages" method="GET">
+            <button class="smallButton" type="submit">Sign Up</button>
+        </form>
+    </div>
 
 </body>
 </html>

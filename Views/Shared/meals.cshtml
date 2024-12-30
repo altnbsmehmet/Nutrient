@@ -81,7 +81,7 @@
                     <button id="showFoodFormButton@(mealId)" onclick="toggleFoodForm(@(mealId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">+</button>
                     <!-- toggleable food creation -->
                     <div id="createFoodForm@(mealId)" class="toggle" style="display: none;">
-                        <form class="flexbox" style="height: auto;" asp-action="Update" asp-controller="Meals" method="POST">
+                        <form class="flexbox" style="height: auto;" asp-action="CreateFood" asp-controller="Foods" method="POST">
                             <input type="hidden" name="mealId" value="@(meal.Id)" />
                             <label>Food Name:</label>
                             <input type="text" name="name" required />
@@ -94,6 +94,7 @@
                     </div>
                     <!-- toggleable meal operations -->
                     <button id="showMealFormButton@(mealId)" onclick="toggleMealForm(@(mealId))" style="display:inline-block; cursor: pointer; color:blue; border: none; background-color:white; font-size: 30px;">...</button>
+                    <!-- toggleable meal operations form -->
                     <div id="mealOperations@(mealId)" class="toggle" style="display: none;">
                         <div class="flexbox" style="height: auto;">
                             <button id="showUpdateFormButton@(mealId)" class="smallButton" onclick="toggleMealForm(@(mealId)); toggleUpdateForm(@(mealId))" style="cursor: pointer;">Update</button>

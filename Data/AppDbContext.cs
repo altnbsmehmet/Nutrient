@@ -34,5 +34,35 @@ namespace Data
                 .HasForeignKey(m => m.UserId);
         }
 
+        public override int SaveChanges()
+        {
+            ApplyUtcDateTimeConversion();
+            return base.SaveChanges();
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ApplyUtcDateTimeConversion();
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
+        private void ApplyUtcDateTimeConversion()
+        {
+            foreach (var entry in ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+            {
+                foreach (var property in entry.Properties)
+                {
+                    if (property.Metadata.ClrType == typeof(DateTime) && property.CurrentValue != null)
+                    {
+                        var dateTime = (DateTime)property.CurrentValue;
+                        property.CurrentValue = dateTime.Kind == DateTimeKind.Unspecified
+                            ? DateTime.SpecifyKind(dateTime, DateTimeKind.Utc)
+                            : dateTime.ToUniversalTime();
+                    }
+                }
+            }
+        }
+
     }
 }
