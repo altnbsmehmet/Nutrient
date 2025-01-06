@@ -17,7 +17,7 @@ namespace Services
             _httpClient = httpClient;
         }
 
-        public async Task<dynamic> SearchFoodsAsync(string keyword)
+        public async Task<FoodSearchResponse> SearchFoodsAsync(string keyword)
         {
             var url = $"https://api.nal.usda.gov/fdc/v1/foods/search?query={keyword}&api_key={_usdaApiKey}&pageNumber=1";
             var response = await _httpClient.GetAsync(url);

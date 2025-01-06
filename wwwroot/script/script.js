@@ -1,8 +1,8 @@
 
+// sidebar menu toggle
 let sidebar = document.getElementById("sidebar");
 let menuToggle = document.getElementById("menuToggle");
 let menuBars = document.querySelectorAll(".menu-toggle .bar");
-
 
 function toggleMenu() {
     if (sidebar.style.left === "0px") {
@@ -19,86 +19,33 @@ function toggleMenu() {
 }
 
 
-function toggleMealForm(id) {
-
-    if (id >= 0) {
-        const form = document.getElementById(`mealOperations${id}`);
-        const button = document.getElementById(`showMealFormButton${id}`);
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
-    
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else form.style.display = 'none';
+// form toggle
+document.body.addEventListener('click', (event) => {
+    if (event.target.matches('[data-toggle="form"]')) {
+        const formType = event.target.dataset.formType;
+        const buttonId = event.target.dataset.id;
+        toggleForm(formType, buttonId);
     }
-    
-    else {
-        const form = document.getElementById('createMealForm');
-        const button = document.getElementById('showMealFormButton');
+});
 
-        console.log('Form visibility:', form.style.display); 
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
+function toggleForm(formType, buttonId) {
+    const form = document.getElementById(formType);
+    const button = document.querySelector(`[data-id="${buttonId}"]`);
 
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else {
-            form.style.display = 'none';
-        }
+    if (button.hasAttribute('data-meal-id')) {
+        document.querySelectorAll('input[type="hidden"][name="mealId"]').forEach(input => input.value = button.dataset.mealId);
+        document.querySelector('textarea[name="mealName"]').innerHTML = document.querySelector(`button[data-meal-id="${button.dataset.mealId}"]`).dataset.mealName;
+    }
+    if (button.hasAttribute('data-food-id')) {
+        document.querySelectorAll('input[type="hidden"][name="foodId"]').forEach(input => input.value = button.dataset.foodId);
     }
 
-}
+    if (!button || !form) return;
 
-
-function toggleFoodForm(id) {
-    if (id >= 0) {
-        const form = document.getElementById(`createFoodForm${id}`);
-        const button = document.getElementById(`showFoodFormButton${id}`);
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
-    
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else  form.style.display = 'none';
-    } else {
-        const form = document.getElementById(`foodOperations${id}`);
-        const button = document.getElementById(`showFoodFormButton${id}`);
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
-    
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else form.style.display = 'none';
-    }
-}
-
-
-function toggleUpdateForm(id) {
-
-    if (id <= -1) {
-        const form = document.getElementById(`updateFoodForm${id}`);
-        const button = document.getElementById(`showFoodFormButton${id}`);
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
-
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else form.style.display = 'none';
-    }
-    else if (id >= 0) {
-        const form = document.getElementById(`updateMeal${id}`);
-        const button = document.getElementById(`showMealFormButton${id}`);
-        if (form.style.display == 'none' || form.style.display == '') {
-            const buttonRect = button.getBoundingClientRect();
-
-            form.style.left = `${buttonRect.right}px`;
-            form.style.top = `${buttonRect.bottom}px`;
-            form.style.display = 'block';
-        } else form.style.display = 'none';
-    }
+    if (form.classList.contains('hidden')) {
+        const buttonRect = button.getBoundingClientRect();
+        form.style.left = `${buttonRect.right}px`;
+        form.style.top = `${buttonRect.bottom}px`;
+        form.classList.remove('hidden');
+    } else form.classList.add('hidden');
 }

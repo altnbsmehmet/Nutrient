@@ -3,6 +3,7 @@ using System;
 namespace Model
 {
 
+
     public class FoodSearchResponse
     {
         public int TotalHits { get; set; }
@@ -10,6 +11,7 @@ namespace Model
         public int TotalPages { get; set; }
         public List<Food> Foods { get; set; }
     }
+
 
     public class Food
     {
@@ -20,11 +22,13 @@ namespace Model
         public string DataType { get; set; }
     }
 
+
     public class FoodMeasure
     {
-        public string DisseminationText { get; set; }
         public double GramWeight { get; set; }
+        public string DisseminationText { get; set; }
     }
+
 
     public class FoodNutrient
     {
@@ -32,5 +36,6 @@ namespace Model
         public double Value { get; set; }
         public string UnitName { get; set; }
     }
+
 
 }

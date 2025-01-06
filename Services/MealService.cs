@@ -46,18 +46,18 @@ namespace Services
                 .ToListAsync();
         }
 
-        public async Task UpdateMealAsync(int id, string name)
+        public async Task UpdateMealAsync(int mealId, string mealName)
         {
             var currentUser = await _identityService.GetCurrentUserAsync();
-            var meal = await _context.Meal.FirstOrDefaultAsync(m => m.Id == id && m.UserId == currentUser.Id);
-            meal.Name = name;
+            var meal = await _context.Meal.FirstOrDefaultAsync(m => m.Id == mealId && m.UserId == currentUser.Id);
+            meal.Name = mealName;
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteMealAsync(int id)
+        public async Task DeleteMealAsync(int mealId)
         {
             var currentUser = await _identityService.GetCurrentUserAsync();
-            var meal = await _context.Meal.FirstOrDefaultAsync(m => m.Id == id && m.UserId == currentUser.Id);
+            var meal = await _context.Meal.FirstOrDefaultAsync(m => m.Id == mealId && m.UserId == currentUser.Id);
             _context.Remove(meal);
             await _context.SaveChangesAsync();
         }

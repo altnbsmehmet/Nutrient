@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using Model;
 
 namespace Services 
 {
@@ -19,26 +21,26 @@ namespace Services
             _identityService = identityService;
         }
 
-        public async Task<string> AddFoodAsync(int mealId, string name, int calorie, string type)
+        public async Task<string> AddFoodAsync(FoodCreation foodCreation)
         {
             var currentUser = await _identityService.GetCurrentUserAsync();
 
             var foods = await GetAllFoodsAsync();
             foreach (var foodObject in foods)
             {
-                if (foodObject.Name == name) return $"The {name} name already exists.";
+                if (foodObject.Description == foodCreation.Description) return $"The {foodCreation.Description} name already exists.";
             }
 
             var meal = await _context.Meal
                 .Include(m => m.MealFoodItems)
-                .FirstOrDefaultAsync(m => m.Id == mealId && m.UserId == currentUser.Id);
+                .FirstOrDefaultAsync(m => m.Id == foodCreation.MealId && m.UserId == currentUser.Id);
             if(meal == null) return "Meal not found.";
 
-            var food = new FoodItem { Name = name, Calories = calorie, Type = type};
+            var food = new FoodItem { Description = foodCreation.Description, Category = foodCreation.Category, Portion = foodCreation.Portion, GramWeight = foodCreation.GramWeight, Calorie = foodCreation.Calorie};
             var mealFoodItem = new MealFoodItem { Meal = meal, FoodItem = food};
             meal.MealFoodItems.Add(mealFoodItem);
             await _context.SaveChangesAsync();
-            return $"The FoodItem named {name} created.";
+            return $"The food with description '{foodCreation.Description}' created and assigned to meal named '{(await _context.Meal.FirstOrDefaultAsync(meal => meal.Id == foodCreation.MealId))?.Name}'.";
         }
 
         public async Task<FoodItem> GetFoodByIdAsync(int id)
@@ -56,18 +58,14 @@ namespace Services
                 .ToListAsync();
         }
 
-        public async Task UpdateFoodAsync(int id, string name, int calorie, string type)
+        public async Task UpdateFoodAsync()
         {
-            var food = await _context.FoodItem.FirstOrDefaultAsync(f => f.Id == id);
-            food.Name = name;
-            food.Calories = calorie;
-            food.Type = type;
-            await _context.SaveChangesAsync();
+            
         }
 
-        public async Task DeleteFoodAsync(int id)
+        public async Task DeleteFoodAsync(int foodId)
         {
-            var food = await _context.FoodItem.FirstOrDefaultAsync(f => f.Id == id);
+            var food = await _context.FoodItem.FirstOrDefaultAsync(f => f.Id == foodId);
             _context.Remove(food);
             await _context.SaveChangesAsync();
         }

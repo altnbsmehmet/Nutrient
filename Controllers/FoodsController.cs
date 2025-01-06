@@ -5,7 +5,7 @@ using Services;
 using System.Text.Json;
 using Model;
 
-
+[Authorize]
 [Route("/foods")]
 public class FoodsController : Controller
 {
@@ -18,23 +18,21 @@ public class FoodsController : Controller
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> CreateFood(int mealId, string name, int calorie, string type)
+    public async Task<IActionResult> CreateFood([FromBody] FoodCreation foodCreation)
     {
-        await _foodService.AddFoodAsync(mealId, name, calorie, type);
-        return RedirectToAction("Meals", "Pages");
+        return Ok(await _foodService.AddFoodAsync(foodCreation));
     }
 
     [HttpPost("update")]
-    public async Task<IActionResult> UpdateFood(int id, string name, int calorie, string type)
+    public async Task<IActionResult> UpdateFood()
     {
-        await _foodService.UpdateFoodAsync(id, name, calorie, type);
-        return RedirectToAction("Meals", "Pages");
+        return View();
     }
 
     [HttpPost("delete")]
-    public async Task<IActionResult> DeleteFood(int id)
+    public async Task<IActionResult> DeleteFood(int foodId)
     {
-        await _foodService.DeleteFoodAsync(id);
+        await _foodService.DeleteFoodAsync(foodId);
         return RedirectToAction("Meals", "Pages");
     }
 
@@ -56,6 +54,11 @@ public class FoodsController : Controller
             string keyword = keywordElement.GetString();
 
             var result = await _usdaApiService.SearchFoodsAsync(keyword);
+            result.Foods = result.Foods.Take(10).ToList();
+            foreach (var food in result.Foods) {
+                food.FoodMeasures.Add(new FoodMeasure {  GramWeight = 0, DisseminationText ="gram" });
+                food.FoodMeasures.RemoveAll(f => f.DisseminationText == "Quantity not specified");
+            }
             return Ok(result);
         }
         catch (Exception ex)
