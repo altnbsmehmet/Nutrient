@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(response => response.json())
         .then(data => {
-            console.log("Response:", data);
 
             const resultContainer = document.getElementById("searchResults");
             resultContainer.innerHTML = "";

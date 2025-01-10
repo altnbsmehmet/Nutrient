@@ -26,7 +26,7 @@
         </ul>
     </div>
 
-    <form class="flexbox" asp-action="Update" asp-controller="Identity" method="POST">
+    <form  asp-action="Update" asp-controller="Identity" method="POST" class="flexbox" style="height: 50vh;">
         <h1>FirstName:</h1><textarea name="firstname">@(ViewBag.User.FirstName)</textarea>
         <h1>LastName:</h1><textarea name="lastname">@(ViewBag.User.LastName)</textarea>
         <h3>Height: </h3><textarea name="height">@(ViewBag.User.Height)</textarea>

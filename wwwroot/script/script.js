@@ -49,3 +49,36 @@ function toggleForm(formType, buttonId) {
         form.classList.remove('hidden');
     } else form.classList.add('hidden');
 }
+
+
+// hovering nutritional details
+const foodHover = document.getElementById('foodHover');
+document.body.addEventListener('mouseover', (event) => {
+    if (event.target.matches('[data-hover="food"]')) {
+            foodHover.classList.remove('hidden');
+            fetch(`/foods?id=${event.target.dataset.foodId}`)
+            .then(response => response.json())
+            .then(data => {
+                foodHover.innerHTML = `
+                    <p>Calorie: ${data.calorie} kcal</p>
+                    <p>Portion: ${data.portion}</p>
+                    <p>GramWeight: ${data.gramWeight} g</p>
+                `;
+            })
+            .catch(error => alert("Error fetching data: " + error));
+    }
+});
+document.body.addEventListener('mouseout', (event) => {
+    if (event.target.matches('[data-hover="food"]')) {
+        foodHover.classList.add('hidden');
+    }
+});    
+
+// mouse coordinates
+let mouseX, mouseY;
+document.body.addEventListener('mousemove', (event) => {
+    mouseX = event.pageX;
+    mouseY = event.pageY;
+    foodHover.style.left = `${mouseX + 2}px`;
+    foodHover.style.top = `${mouseY + 2}px`;
+});

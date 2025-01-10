@@ -46,27 +46,27 @@
         <div style="grid-column: span 4; height: auto;" class="flexbox">
             <div>
                 <h1 style="display: inline-block;">Meals @(dailyTotalCalorie)</h1>
-                <button data-toggle="form" data-form-type="mealCreation" class="plusButton">+</button>
+                <button data-toggle="form" data-form-type="mealCreation" class="interactionButton">+</button>
             </div>
         </div>
 
         @{
             var totalCalories = new List<int>();
-        }
-        @foreach(var meal in ViewBag.Meals)
-        {
-            @if (meal.MealFoodItems != null) 
+            foreach(var meal in ViewBag.Meals)
             {
-                int totalCalorie = 0;
-                @foreach(var mealFoodItem in meal.MealFoodItems)
-                    {
-                        totalCalorie += mealFoodItem.FoodItem.Calorie;
-                    }
-                totalCalories.Add(totalCalorie);
+                @if (meal.MealFoodItems != null) 
+                {
+                    int totalCalorie = 0;
+                    @foreach(var mealFoodItem in meal.MealFoodItems)
+                        {
+                            totalCalorie += mealFoodItem.FoodItem.Calorie;
+                        }
+                    totalCalories.Add(totalCalorie);
+                }
             }
         }
 
-        @{int mealId = 0;}
+        @{ int mealId = 0; }
         <!-- Meals -->
         @foreach(var meal in ViewBag.Meals)
         {
@@ -74,8 +74,8 @@
                 <div class="flexbox" style="flex-direction: row;">
                     <h3 style="display: inline-block;">@(meal.Name)</h3>
                     <p>@(totalCalories[mealId])</p>
-                    <button data-meal-id="@(meal.Id)" data-meal-name="@(meal.Name)" data-toggle="form" data-form-type="foodCreation" class="plusButton">+</button>
-                    <button data-meal-id="@(meal.Id)" data-meal-name="@(meal.Name)" data-toggle="form" data-form-type="mealOperations" class="plusButton">...</button>
+                    <button data-meal-id="@(meal.Id)" data-meal-name="@(meal.Name)" data-toggle="form" data-form-type="foodCreation" class="interactionButton">+</button>
+                    <button data-meal-id="@(meal.Id)" data-meal-name="@(meal.Name)" data-toggle="form" data-form-type="mealOperations" class="interactionButton">...</button>
                 </div>
 
                 <!-- Foods -->
@@ -83,13 +83,11 @@
                 {
                     @foreach(var mealFoodItem in meal.MealFoodItems)
                     {
-                        <div>
-                            <div class="flexbox" style="width: 200px; height: auto; flex-direction: row; justify-content: space-between;">
-                                <p style="display: inline-block;">@(mealFoodItem.FoodItem.Description) </p>
-                                <div>
-                                    <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calorie) </p>
-                                    <button data-food-id="@(mealFoodItem.FoodItem.Id)" data-food-description="@(mealFoodItem.FoodItem.Description)" data-toggle="form" data-form-type="foodOperations" class="plusButton">...</button>
-                                </div>
+                        <div class="flexbox food" style="height: 20px;">
+                            <p data-food-id="@(mealFoodItem.FoodItem.Id)" data-hover="food" style="width:auto 60%; display: inline-block;">@(mealFoodItem.FoodItem.Description) </p>
+                            <div style="width: 40%;">
+                                <p style="display: inline-block;">@(mealFoodItem.FoodItem.Calorie) </p>
+                                <button data-food-id="@(mealFoodItem.FoodItem.Id)" data-food-description="@(mealFoodItem.FoodItem.Description)" data-toggle="form" data-form-type="foodOperations" class="interactionButton" style="background-color: #f8f9fa;">...</button>
                             </div>
                         </div>
                     }
@@ -164,6 +162,11 @@
             <button data-toggle="form" data-form-type="foodUpdate"  class="smallButton" type="submit">Update</button>
         </form>
     </div> -->
+
+    <!-- food hover  -->
+    <div id="foodHover" class="toggle hidden flexbox">
+
+    </div>
 
 <script src="~/script/assignUniqueIds.js"></script>
 <script src="~/script/script.js"></script>

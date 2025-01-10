@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Services;
 using System.Text.Json;
 using Model;
+using Data;
 
-[Authorize]
+//[Authorize]
 [Route("/foods")]
 public class FoodsController : Controller
 {
@@ -15,6 +16,14 @@ public class FoodsController : Controller
     {
         _foodService = foodService;
         _usdaApiService = usdaApiService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetFoodById(int id)
+    {
+        var result = await _foodService.GetFoodByIdAsync(id);
+        Console.WriteLine(result);
+        return Json(result);
     }
 
     [HttpPost("create")]

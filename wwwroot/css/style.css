@@ -29,28 +29,34 @@ body, html {
 .submitButton {
     width: 75px;
     height: 20px;
-    background-color: rgb(0, 113, 227);
+    background-color: #266CA9;
     color: white;
     border: none;
     border-radius: 10px;
 }
 
 .smallButton {
-    width: 50px;
-    height: 15px;
-    background-color: white;
-    border: 1px solid black;
+    width: 65.625px;
+    height: 17.5px;
+    background-color: #5F84A2;
+    color: white;
+    border: none;
     border-radius: 7.5px;
     cursor: pointer;
 }
 
-.plusButton {
+.interactionButton {
     display: inline-block;
     cursor: pointer;
-    color: blue;
+    color: #266CA9;
     background-color: white;
     font-size: 30px;
     border: none;
+}
+
+.header {
+    color: #194569;
+
 }
 
 .clickable-form {
@@ -65,4 +71,14 @@ body, html {
 
 .clickable-form:hover {
     background-color: #e2e6ea;
+}
+
+.food {
+    width: 80%;
+    background-color: #f8f9fa;
+    border-radius: 17.5px;
+    padding: 7.5px;
+    height: auto; 
+    flex-direction: row;
+    justify-content: space-between;
 }
