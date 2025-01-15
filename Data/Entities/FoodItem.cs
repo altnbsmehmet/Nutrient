@@ -1,5 +1,3 @@
-using System;
-
 namespace Data
 {
     public class FoodItem
@@ -16,6 +14,10 @@ namespace Data
         public double? VitaminA {get; set; }
         public double? Calcium { get; set; }
 
-        public ICollection<MealFoodItem> MealFoodItems { get; set; } = new List<MealFoodItem>();
+
+        public ICollection<FoodNutrient> FoodNutrients { get; set; } = new List<FoodNutrient>();
+
+        public int MealId { get; set; }
+        public Meal Meal { get; set; }
     }
 }

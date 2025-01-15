@@ -1,11 +1,5 @@
-using System;
-using System.CodeDom.Compiler;
-using System.Security.Cryptography.X509Certificates;
-using Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
+using Data;
 
 namespace Services
 {
@@ -27,13 +21,14 @@ namespace Services
             var meal = new Meal { Name = name, Date = DateTime.Now, UserId = currentUser.Id };
             await _context.Meal.AddAsync(meal);
             await _context.SaveChangesAsync();
-            return "The Meal named {name} created.";
+            return $"The Meal named '{name}' created.";
         }
 
         public async Task<Meal> GetMealByIdAsync(int id)
         {
             var currentUser = await _identityService.GetCurrentUserAsync();
-            return await _context.Meal.FirstOrDefaultAsync(m => m.Id == id && m.UserId == currentUser.Id);
+            return await _context.Meal
+                .FirstOrDefaultAsync(m => m.Id == id && m.UserId == currentUser.Id);
         }
 
         public async Task<List<Meal>> GetAllMealsAsync()
@@ -41,8 +36,7 @@ namespace Services
             var currentUser = await _identityService.GetCurrentUserAsync();
             return await _context.Meal
                 .Where(m => m.UserId == currentUser.Id)
-                .Include(m => m.MealFoodItems)
-                .ThenInclude(mfi => mfi.FoodItem)
+                .Include(m => m.FoodItems)
                 .ToListAsync();
         }
 

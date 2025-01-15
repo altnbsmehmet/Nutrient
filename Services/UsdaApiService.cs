@@ -1,6 +1,4 @@
-using System;
 using Newtonsoft.Json;
-using Data;
 using Model;
 
 namespace Services
@@ -8,9 +6,7 @@ namespace Services
     public class UsdaApiService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _usdaApiKey = "YdgWdIhAtbb3b97vVIm8TE3UFL62wSefF5FbGKEu";
-        private readonly string _nutritionixApiKey = "3c6fb560a1e35f05b99de9b124409b1b";
-        private readonly string _nutritionixApiId = "5cedbe56";
+        private readonly string usdaApiKey = "YdgWdIhAtbb3b97vVIm8TE3UFL62wSefF5FbGKEu";
 
         public UsdaApiService(HttpClient httpClient)
         {
@@ -19,25 +15,18 @@ namespace Services
 
         public async Task<FoodSearchResponse> SearchFoodsAsync(string keyword)
         {
-            var url = $"https://api.nal.usda.gov/fdc/v1/foods/search?query={keyword}&api_key={_usdaApiKey}&pageNumber=1";
+            var url = $"https://api.nal.usda.gov/fdc/v1/foods/search?query={keyword}&api_key={usdaApiKey}&pageNumber=1";
             var response = await _httpClient.GetAsync(url);
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"HTTP request failed: {ex.Message}");
-                throw;
-            }
-            var json = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<FoodSearchResponse>(json);
+            var result = JsonConvert.DeserializeObject<FoodSearchResponse>(await response.Content.ReadAsStringAsync());
 
-            var filteredFoods = result.Foods.Where(food => 
-                    food.DataType != "Branded")
+            result.Foods = result.Foods
+                .Where(food => food.DataType != "Branded")
+                .Take(10)
                 .ToList();
-
-            result.Foods = filteredFoods;
+            foreach (var food in result.Foods) {
+                food.FoodMeasures.Add(new FoodMeasure {  GramWeight = 0, DisseminationText ="gram" });
+                food.FoodMeasures.RemoveAll(f => f.DisseminationText == "Quantity not specified");
+            }
 
             return result;
         }

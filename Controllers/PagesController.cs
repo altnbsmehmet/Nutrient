@@ -1,8 +1,5 @@
-using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Reflection.Metadata.Ecma335;
-using System.Net.Http.Headers;
 using Services;
 
 
@@ -44,7 +41,6 @@ public class PagesController : Controller
     [HttpGet("index")]
     public async Task<IActionResult> Index()
     {
-        ViewBag.Foods = await _foodService.GetAllFoodsAsync();
         return View("index");
     }
 

@@ -60,9 +60,12 @@ document.body.addEventListener('mouseover', (event) => {
             .then(response => response.json())
             .then(data => {
                 foodHover.innerHTML = `
-                    <p>Calorie: ${data.calorie} kcal</p>
-                    <p>Portion: ${data.portion}</p>
-                    <p>GramWeight: ${data.gramWeight} g</p>
+                    <p>Calorie: ${data.Calorie} kcal</p>
+                    <p>Portion: ${data.Portion}</p>
+                    <p>GramWeight: ${data.GramWeight} g</p>
+                    <p>Protein: ${data.FoodNutrients.find(fn => fn.NutrientName == "Protein")?.Value} ${data.FoodNutrients.find(fn => fn.NutrientName == "Protein")?.UnitName}</p>
+                    <p>Carbonhydrate: ${data.FoodNutrients.find(fn => fn.NutrientName == "Carbohydrate, by difference")?.Value} ${data.FoodNutrients.find(fn => fn.NutrientName == "Carbohydrate, by difference")?.UnitName}</p>
+                    <p>Total Fat: ${data.FoodNutrients.find(fn => fn.NutrientName == "Total lipid (fat)")?.Value} ${data.FoodNutrients.find(fn => fn.NutrientName == "Total lipid (fat)")?.UnitName}</p>
                 `;
             })
             .catch(error => alert("Error fetching data: " + error));
@@ -72,7 +75,8 @@ document.body.addEventListener('mouseout', (event) => {
     if (event.target.matches('[data-hover="food"]')) {
         foodHover.classList.add('hidden');
     }
-});    
+});
+
 
 // mouse coordinates
 let mouseX, mouseY;

@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250114151527_FoodNutrient")]
+    partial class FoodNutrient
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,9 +138,6 @@ namespace Backend.Migrations
                     b.Property<int>("GramWeight")
                         .HasColumnType("integer");
 
-                    b.Property<int>("MealId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Portion")
                         .IsRequired()
                         .HasColumnType("text");
@@ -149,8 +149,6 @@ namespace Backend.Migrations
                         .HasColumnType("double precision");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MealId");
 
                     b.ToTable("FoodItem");
                 });
@@ -208,6 +206,21 @@ namespace Backend.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Meal");
+                });
+
+            modelBuilder.Entity("Data.MealFoodItem", b =>
+                {
+                    b.Property<int>("MealId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("FoodItemId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MealId", "FoodItemId");
+
+                    b.HasIndex("FoodItemId");
+
+                    b.ToTable("MealFoodItem");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -342,17 +355,6 @@ namespace Backend.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Data.FoodItem", b =>
-                {
-                    b.HasOne("Data.Meal", "Meal")
-                        .WithMany("FoodItems")
-                        .HasForeignKey("MealId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Meal");
-                });
-
             modelBuilder.Entity("Data.FoodNutrient", b =>
                 {
                     b.HasOne("Data.FoodItem", "FoodItem")
@@ -373,6 +375,25 @@ namespace Backend.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Data.MealFoodItem", b =>
+                {
+                    b.HasOne("Data.FoodItem", "FoodItem")
+                        .WithMany("MealFoodItems")
+                        .HasForeignKey("FoodItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Meal", "Meal")
+                        .WithMany("MealFoodItems")
+                        .HasForeignKey("MealId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FoodItem");
+
+                    b.Navigation("Meal");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -434,11 +455,13 @@ namespace Backend.Migrations
             modelBuilder.Entity("Data.FoodItem", b =>
                 {
                     b.Navigation("FoodNutrients");
+
+                    b.Navigation("MealFoodItems");
                 });
 
             modelBuilder.Entity("Data.Meal", b =>
                 {
-                    b.Navigation("FoodItems");
+                    b.Navigation("MealFoodItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,10 +1,8 @@
 using Data;
 using Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.DependencyInjection;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +14,12 @@ builder.Services.AddScoped<IdentityService>();
 builder.Services.AddScoped<MealService>();
 builder.Services.AddScoped<FoodService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore; // Ignore circular references
+        options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented; // Pretty-print JSON
+    });
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

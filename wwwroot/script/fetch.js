@@ -12,12 +12,13 @@ function createFoodBySearch(event) {
 
     const inputs = event.currentTarget.querySelectorAll('input');
     const requestBody = {
+        FoodNutrients: JSON.parse(inputs[0].value),
         MealId: document.querySelector('input[type="hidden"][name="mealId"]').value,
-        Description: inputs[0].value,
-        Category: inputs[1].value,
-        Portion: inputs[2].value,
-        GramWeight: (inputs[5].value != "" && inputs[5].value != null) && inputs[5].value > 0 ? inputs[5].value : inputs[3].value,
-        Calorie: inputs[4].value
+        Description: inputs[1].value,
+        Category: inputs[2].value,
+        Portion: inputs[3].value,
+        GramWeight: (inputs[6].value != "" && inputs[6].value != null) && inputs[6].value > 0 ? inputs[6].value : inputs[4].value,
+        Calorie: inputs[5].value
     };
 
     fetch("/foods/create", {
@@ -43,14 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const keyword = document.getElementById("searchKeyword").value;
 
-        // Perform a POST request using Fetch API
-        fetch("/foods/search", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ keyword: keyword })
-        })
+        fetch(`/foods/search?keyword=${keyword}`)
         .then(response => response.json())
         .then(data => {
 
@@ -69,8 +63,16 @@ document.addEventListener("DOMContentLoaded", function () {
                 foodElement.setAttribute("onclick", "createFoodBySearch(event)");
                 
                 const standartValue = (food.foodNutrients.find(nutrient => nutrient.unitName === "KCAL")?.value || 0);
+                const standarts = food.foodNutrients;
+                let foodNutrients = food.foodNutrients;
+                foodNutrients = JSON.parse(JSON.stringify(food.foodNutrients.filter(fn => fn.unitName !== "KCAL")));
+                foodNutrients.forEach(fn => {
+                    const standart = standarts.find(standart => standart.nutrientName === fn.nutrientName);
+                    fn.value = roundToTwo(standart.value * food.foodMeasures[0].gramWeight / 100);
+                });
                 // construct the inner HTML of the result
                 foodElement.innerHTML = `
+                    <input type="hidden" name="foodSerialization${i}" value"">
                     <input type="hidden" name="foodDescription${i}" value="${food.description}">
                     <input type="hidden" name="foodCategory${i}" value="${food.foodCategory}">
                     <input type="hidden" name="foodPortion${i}" value="${food.foodMeasures[0].disseminationText}">
@@ -88,6 +90,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const sFoodPortion = document.getElementById(`foodPortion${i}`);
                 let previousFoodPortion = sFoodPortion.value;
+                const iFoodSerialization = document.querySelector(`input[name = "foodSerialization${i}"]`);
+                iFoodSerialization.value = JSON.stringify(foodNutrients);
                 const iFoodCustom = document.querySelector(`input[name ="foodCustom${i}"]`);
                 const iFoodCalorie = document.querySelector(`input[name ="foodCalorie${i}"]`);
                 const iFoodGramWeight = document.querySelector(`input[name ="foodGramWeight${i}"]`);
@@ -98,7 +102,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         iFoodCustom.value = "";
                         previousFoodPortion = sFoodPortion.value;
                     }
-                    iFoodCalorie.value = roundToTwo(standartValue* sFoodPortion.value / 100);
+                    foodNutrients.forEach(fn => {
+                        const standart = standarts.find(standart => standart.nutrientName === fn.nutrientName);
+                        fn.value = roundToTwo(standart.value * sFoodPortion.value / 100);
+                    });
+                    iFoodSerialization.value = JSON.stringify(foodNutrients);
+                    iFoodCalorie.value = roundToTwo(standartValue * sFoodPortion.value / 100);
                     iFoodGramWeight.value = sFoodPortion.value;
                     iFoodPortion.value = food.foodMeasures.find(foodMeasure => foodMeasure.gramWeight == sFoodPortion.value).disseminationText;
                     pFoodCalorie.textContent = roundToTwo(standartValue * sFoodPortion.value / 100);
@@ -112,11 +121,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (iFoodCustom.value > 0) {
                         sFoodPortion.dispatchEvent(changeEvent);
                         if (iFoodPortion.value === "gram") {
+                            foodNutrients.forEach(fn => {
+                                const standart = standarts.find(standart => standart.nutrientName === fn.nutrientName);
+                                fn.value = roundToTwo(standart.value * iFoodCustom.value / 100);
+                            });
+                            iFoodSerialization.value = JSON.stringify(foodNutrients);
                             iFoodCalorie.value = roundToTwo((standartValue * iFoodCustom.value) / 100);
                             iFoodGramWeight.value = iFoodCustom.value;
                             pFoodCalorie.textContent = iFoodCalorie.value;
-                        }
-                        else  {
+                        } else  {
+                            foodNutrients.forEach(fn => fn.value = roundToTwo(fn.value * iFoodCustom.value));
+                            iFoodSerialization.value = JSON.stringify(foodNutrients);
                             iFoodCalorie.value = roundToTwo(iFoodCalorie.value * iFoodCustom.value);
                             iFoodGramWeight.value = iFoodGramWeight.value * iFoodCustom.value;
                             pFoodCalorie.textContent = iFoodCalorie.value;

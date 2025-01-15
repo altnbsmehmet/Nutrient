@@ -1,5 +1,3 @@
-using System;
-
 namespace Model
 {
 
@@ -28,14 +26,5 @@ namespace Model
         public double GramWeight { get; set; }
         public string DisseminationText { get; set; }
     }
-
-
-    public class FoodNutrient
-    {
-        public string NutrientName { get; set; }
-        public double Value { get; set; }
-        public string UnitName { get; set; }
-    }
-
 
 }

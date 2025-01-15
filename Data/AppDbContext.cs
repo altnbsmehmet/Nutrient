@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data 
@@ -15,23 +14,17 @@ namespace Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MealFoodItem>()
-                .HasKey(mf => new { mf.MealId, mf.FoodItemId });
-
-            modelBuilder.Entity<MealFoodItem>()
-                .HasOne(mf => mf.Meal)
-                .WithMany(m => m.MealFoodItems)
-                .HasForeignKey(mf => mf.MealId);
-
-            modelBuilder.Entity<MealFoodItem>()
-                .HasOne(mf => mf.FoodItem)
-                .WithMany(f => f.MealFoodItems)
-                .HasForeignKey(mf => mf.FoodItemId);
-
             modelBuilder.Entity<Meal>()
-                .HasOne(m => m.User)
-                .WithMany(u => u.Meals)
-                .HasForeignKey(m => m.UserId);
+                .HasMany(m => m.FoodItems)
+                .WithOne(fi => fi.Meal)
+                .HasForeignKey(fi => fi.MealId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FoodItem>()
+                .HasMany(fi => fi.FoodNutrients)
+                .WithOne(fn => fn.FoodItem)
+                .HasForeignKey(fn => fn.FoodItemId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override int SaveChanges()

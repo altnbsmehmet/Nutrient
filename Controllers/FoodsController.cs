@@ -1,29 +1,23 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.AspNetCore.Authorization;
 using Services;
 using System.Text.Json;
 using Model;
-using Data;
 
 //[Authorize]
 [Route("/foods")]
 public class FoodsController : Controller
 {
     private readonly FoodService _foodService;
-    private readonly UsdaApiService _usdaApiService;
-    public FoodsController(FoodService foodService, UsdaApiService usdaApiService)
+    public FoodsController(FoodService foodService)
     {
         _foodService = foodService;
-        _usdaApiService = usdaApiService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetFoodById(int id)
     {
         var result = await _foodService.GetFoodByIdAsync(id);
-        Console.WriteLine(result);
-        return Json(result);
+        return Ok(result);
     }
 
     [HttpPost("create")]
@@ -45,36 +39,10 @@ public class FoodsController : Controller
         return RedirectToAction("Meals", "Pages");
     }
 
-    [HttpPost("search")]
-    public async Task<IActionResult> SearchFoods()
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchFoods(string keyword)
     {
-        try
-        {
-            using var reader = new StreamReader(Request.Body);
-            var body = await reader.ReadToEndAsync();
-
-            var payload = JsonDocument.Parse(body).RootElement;
-
-            if (!payload.TryGetProperty("keyword", out JsonElement keywordElement) || keywordElement.ValueKind != JsonValueKind.String)
-            {
-                return BadRequest("Keyword required.");
-            }
-
-            string keyword = keywordElement.GetString();
-
-            var result = await _usdaApiService.SearchFoodsAsync(keyword);
-            result.Foods = result.Foods.Take(10).ToList();
-            foreach (var food in result.Foods) {
-                food.FoodMeasures.Add(new FoodMeasure {  GramWeight = 0, DisseminationText ="gram" });
-                food.FoodMeasures.RemoveAll(f => f.DisseminationText == "Quantity not specified");
-            }
-            return Ok(result);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occured: {ex.Message}");
-            return StatusCode(500, "An internal server error occured. Please try again later.");
-        }
+        return Ok(await _foodService.SearchFoodsAsync(keyword));
     }
     
 }

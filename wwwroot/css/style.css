@@ -63,7 +63,7 @@ body, html {
     border: none;
     background-color: #f8f9fa;
     cursor: pointer;
-    padding: 1rem;
+    padding: 15px;
     margin: 0.5rem 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease-in-out;
@@ -76,9 +76,16 @@ body, html {
 .food {
     width: 80%;
     background-color: #f8f9fa;
+    cursor: pointer;
     border-radius: 17.5px;
     padding: 7.5px;
     height: auto; 
     flex-direction: row;
     justify-content: space-between;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out;
+}
+
+.food:hover {
+    background-color: #e2e6ea;
 }
