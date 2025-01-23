@@ -12,17 +12,6 @@ namespace Services
             _context = context;
             _identityService = identityService;
         }
-        
-        public async Task<string> AddMealAsync(string name)
-        {
-            var currentUser = await _identityService.GetCurrentUserAsync();
-            var existingMeal = await _context.Meal.Where(m => m.UserId == currentUser.Id && m.Name == name).FirstOrDefaultAsync();
-            if (existingMeal != null) return $"The meal named '{name}' already exists.";
-            var meal = new Meal { Name = name, Date = DateTime.Now, UserId = currentUser.Id };
-            await _context.Meal.AddAsync(meal);
-            await _context.SaveChangesAsync();
-            return $"The Meal named '{name}' created.";
-        }
 
         public async Task<Meal> GetMealByIdAsync(int id)
         {
@@ -38,6 +27,19 @@ namespace Services
                 .Where(m => m.UserId == currentUser.Id)
                 .Include(m => m.FoodItems)
                 .ToListAsync();
+        }
+
+        public async Task<string> AddMealAsync(string name)
+        {
+            var currentUser = await _identityService.GetCurrentUserAsync();
+
+            var existingMeal = await _context.Meal.Where(m => m.UserId == currentUser.Id && m.Name == name).FirstOrDefaultAsync();
+            if (existingMeal != null) return $"The meal named '{name}' already exists.";
+            
+            var meal = new Meal { Name = name, Date = DateTime.Now, UserId = currentUser.Id };
+            await _context.Meal.AddAsync(meal);
+            await _context.SaveChangesAsync();
+            return $"The Meal named '{name}' created.";
         }
 
         public async Task UpdateMealAsync(int mealId, string mealName)

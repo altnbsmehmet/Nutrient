@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Services;
-using System.Text.Json;
 using Model;
+using Microsoft.AspNetCore.Authorization;
 
-//[Authorize]
+[Authorize]
 [Route("/foods")]
 public class FoodsController : Controller
 {

@@ -17,13 +17,13 @@ public class PagesController : Controller
         _identityService = identityService;
     }
 
-    [HttpGet("/")]
+    [HttpGet]
     public IActionResult SignIn()
     {
         return View("signIn");
     }
 
-    [HttpGet("/signUp")]
+    [HttpGet("signUp")]
     public IActionResult SignUp()
     {
         return View("signUp");
@@ -48,6 +48,7 @@ public class PagesController : Controller
     [HttpGet("dashboards")]
     public async Task<IActionResult> Dashboards()
     {
+        var meals = _mealService.GetAllMealsAsync();
         return View("dashboards");
     }
 

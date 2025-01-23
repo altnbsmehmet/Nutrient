@@ -2,6 +2,17 @@ import { roundToTwo } from './utilities.js';
 import { toggleForm } from './utilities.js';
 
 
+// assigning unique ids for each button
+document.addEventListener("DOMContentLoaded", () => {
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button, index) => {
+        button.setAttribute("data-id", `button-${index + 1}`);
+    });
+});
+
+
+
+
 // form toggle
 document.body.addEventListener('click', (event) => {
     if (event.target.matches('[data-toggle="form"]')) {

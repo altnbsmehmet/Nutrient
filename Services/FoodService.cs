@@ -17,6 +17,23 @@ namespace Services
             _usdaApiService = usdaApiService;
         }
 
+        public async Task<string> GetFoodByIdAsync(int id)
+        {
+            var food = JsonConvert.SerializeObject(await _context.FoodItem.Include(fi => fi.FoodNutrients).FirstOrDefaultAsync(f => f.Id == id), Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // Prevents infinite loops
+            });
+            return food;
+        }
+
+        public async Task<List<FoodItem>> GetAllFoodsAsync()
+        {
+            var currentUser = await _identityService.GetCurrentUserAsync();
+            return await _context.FoodItem
+                .Where(f => f.Meal.UserId == currentUser.Id)
+                .ToListAsync();
+        }
+
         public async Task<string> AddFoodAsync(FoodCreation foodCreation)
         {
             var currentUser = await _identityService.GetCurrentUserAsync();
@@ -40,23 +57,6 @@ namespace Services
             meal.FoodItems.Add(foodItem);
             await _context.SaveChangesAsync();
             return $"The food with description '{foodCreation.Description}' created and assigned to meal named '{(await _context.Meal.FirstOrDefaultAsync(meal => meal.Id == foodCreation.MealId))?.Name}'.";
-        }
-
-        public async Task<string> GetFoodByIdAsync(int id)
-        {
-            var food = JsonConvert.SerializeObject(await _context.FoodItem.Include(fi => fi.FoodNutrients).FirstOrDefaultAsync(f => f.Id == id), Formatting.Indented, new JsonSerializerSettings
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore // Prevents infinite loops
-            });
-            return food;
-        }
-
-        public async Task<List<FoodItem>> GetAllFoodsAsync()
-        {
-            var currentUser = await _identityService.GetCurrentUserAsync();
-            return await _context.FoodItem
-                .Where(f => f.Meal.UserId == currentUser.Id)
-                .ToListAsync();
         }
 
         public async Task UpdateFoodAsync()
